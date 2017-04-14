@@ -87,6 +87,9 @@ for($i=1;$i<=11;$i++){
  $plxPlugin->setParam('libelleCGV', $_POST['libelleCGV'], 'string');
  $plxPlugin->setParam('urlCGV', $_POST['urlCGV'], 'string');
 
+ $plxPlugin->setParam('racine_commandes', (empty(trim($_POST['racine_commandes']))?'data/commandes/':trim($_POST['racine_commandes'])), 'string');;
+ $plxPlugin->setParam('racine_products', (empty(trim($_POST['racine_products']))?'data/products/':trim($_POST['racine_products'])), 'string');
+ 
  $plxPlugin->saveParams();
  header('Location: parametres_plugin.php?p=plxMyShop');
  exit;
@@ -147,6 +150,9 @@ $var['cookie'] = $plxPlugin->getParam('cookie')!='' ? $plxPlugin->getParam('cook
 $var["position_devise"] = ("" === $plxPlugin->getParam("position_devise")) ? current(array_keys($tabPosDevise)) : $plxPlugin->getParam("position_devise");
 $var["libelleCGV"] = ("" === $plxPlugin->getParam("libelleCGV")) ? $plxPlugin->getLang("L_COMMANDE_LIBELLE_DEFAUT") : $plxPlugin->getParam("libelleCGV");
 $var["urlCGV"] = ("" === $plxPlugin->getParam("urlCGV")) ? "" : $plxPlugin->getParam("urlCGV");
+
+$var['racine_commandes'] = (empty(trim($plxPlugin->getParam('racine_commandes')))?'data/commandes/':trim($plxPlugin->getParam('racine_commandes')));
+$var['racine_products'] = (empty(trim($plxPlugin->getParam('racine_products')))?'data/products/':trim($plxPlugin->getParam('racine_products')));
 
 # On récupère les templates des pages statiques
 $aTemplates = array();
@@ -390,6 +396,12 @@ $cssAdmn = PLX_PLUGINS.get_class($plxPlugin).'/css/administration.css';
   <p><?php plxUtils::printSelect("affPanier", $tabAffPanier, $var["affPanier"]) ?></p>
   <p class="field"><label for="id_template"><?php $plxPlugin->lang('L_CONFIG_PAGE_TEMPLATE') ?>&nbsp;:</label></p>
   <p><?php plxUtils::printSelect('template', $aTemplates, $var['template']) ?></p>
+  
+  <h2><?php $plxPlugin->lang('L_CONFIG_FOLDERS') ?></h2>
+  <p class="field"><label for="id_racine_commandes"><?php $plxPlugin->lang('L_CONFIG_ORDERS_FOLDER') ?>&nbsp;:</label></p>
+  <p><?php plxUtils::printInput('racine_commandes',$var['racine_commandes'],'text','100-120') ?></p>
+  <p class="field"><label for="id_racine_products"><?php $plxPlugin->lang('L_CONFIG_PRODUCTS_FOLDER') ?>&nbsp;:</label></p>
+  <p><?php plxUtils::printInput('racine_products',$var['racine_products'],'text','100-120') ?></p>
  </div>
 </form>
 </div>
