@@ -119,24 +119,7 @@ if (isset($_SESSION[$this->plug['name']]["ncart"]) && $_SESSION[$this->plug['nam
   echo '<?php if($plxMotor->mode == "product" || strstr($plxMotor->template,"boutique") || $plxMotor->plxPlugins->aPlugins["'.$this->plug['name'].'"]->shortcodeactif ){ ?>';
 //javascript de bascule des boutons produits
 ?>
-<script type="text/javascript">
- function chngNbProd(k,sbmt){
-  var btn = document.getElementById("addProd"+k);
-  var nb = document.getElementById("nbProd"+k);
-  if(btn.value != '<?php echo htmlspecialchars($this->getLang('L_PUBLIC_ADD_BASKET')); ?>'){
-   if(nb.value == nb.getAttribute("data-o") || nb.value == 0){
-    if(sbmt){//delete
-     nb.value="0";
-    }
-    btn.value = '<?php echo htmlspecialchars($this->getLang('L_PUBLIC_DEL_BASKET')); ?>';
-    btn.setAttribute("class", "red");
-   }else{
-    btn.value = '<?php echo htmlspecialchars($this->getLang('L_PUBLIC_MOD_BASKET')); ?>';
-    btn.setAttribute("class", "orange");
-   }
-  }
- }
-</script>
+<script type="text/javascript">function chngNbProd(e,t){var a=document.getElementById("addProd"+e),d=document.getElementById("nbProd"+e);"<?php echo $this->getLang('L_PUBLIC_ADD_BASKET'); ?>"!=a.value&&(d.value==d.getAttribute("data-o")||0==d.value?(t&&(d.value="0"),a.value="<?php echo $this->getLang('L_PUBLIC_DEL_BASKET'); ?>",a.setAttribute("class","red")):(a.value="<?php echo $this->getLang('L_PUBLIC_MOD_BASKET'); ?>",a.setAttribute("class","orange")))}</script>
 <?php
   echo '<?php } ?>'; // fi if mode product || strstr template boutique || shrotcode
   if (isset($_SESSION[$this->plug['name']]["msgProdUpDate"]) && $_SESSION[$this->plug['name']]["msgProdUpDate"]){
