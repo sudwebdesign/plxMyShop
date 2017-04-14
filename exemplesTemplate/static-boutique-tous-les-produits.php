@@ -24,12 +24,10 @@
       jQuery.noConflict();
       </script>
 
-      <script type='text/javascript' src='<?php echo $plxMyShop->plxMotor->racine . PLX_PLUGINS;?>plxMyShop/js/libajax.js'></script>
       <script type='text/javascript' src='<?php echo $plxMyShop->plxMotor->racine . PLX_PLUGINS;?>plxMyShop/js/panier.js'></script>
 
       <script type='text/javascript'>
       var error = false;
-      var repertoireAjax = '<?php echo $plxMyShop->plxMotor->racine . PLX_PLUGINS;?>plxMyShop/ajax/';
       var devise = '<?php echo $plxMyShop->getParam("devise");?>';
       var pos_devise = '<?php echo $plxMyShop->getParam("pos_devise");?>';
       var shoppingCart = null;

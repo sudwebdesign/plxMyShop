@@ -26,7 +26,7 @@ if(!empty($_POST)){
  exit;
 }
 
-$dir = PLX_ROOT."data/commandes/";
+$dir = PLX_ROOT.(empty($plxPlugin->getParam('racine_commandes'))?'data/commandes/':$plxPlugin->getParam('racine_commandes'));
 if (isset($_GET['kill']) && !empty($_GET['kill']) && is_file($dir.$_GET['kill'])){
  unlink($dir.$_GET['kill']);
  header('Location: plugin.php?p=plxMyShop&mod=cmd');

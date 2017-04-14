@@ -53,11 +53,11 @@ class plxMyShop extends plxPlugin {
 
   $this->getProducts();
 
-  if (!is_dir(PLX_ROOT.'data/commandes/')){
-   mkdir(PLX_ROOT.'data/commandes/', 0755, true);
+  if (!is_dir(PLX_ROOT.(empty($this->getParam('racine_commandes'))?'data/commandes/':$this->getParam('racine_commandes')))){
+   mkdir(PLX_ROOT.(empty($this->getParam('racine_commandes'))?'data/commandes/':$this->getParam('racine_commandes')), 0755, true);
   }
-  if (!is_file(PLX_ROOT.'data/commandes/index.html')){
-   $mescommandeindex = fopen(PLX_ROOT.'data/commandes/index.html', 'w+');
+  if (!is_file(PLX_ROOT.(empty($this->getParam('racine_commandes'))?'data/commandes/':$this->getParam('racine_commandes')).'index.html')){
+   $mescommandeindex = fopen(PLX_ROOT.(empty($this->getParam('racine_commandes'))?'data/commandes/':$this->getParam('racine_commandes')).'index.html', 'w+');
    fclose($mescommandeindex);
   }
 
@@ -119,24 +119,7 @@ if (isset($_SESSION[$this->plug['name']]["ncart"]) && $_SESSION[$this->plug['nam
   echo '<?php if($plxMotor->mode == "product" || strstr($plxMotor->template,"boutique") || $plxMotor->plxPlugins->aPlugins["'.$this->plug['name'].'"]->shortcodeactif ){ ?>';
 //javascript de bascule des boutons produits
 ?>
-<script type="text/javascript">
- function chngNbProd(k,sbmt){
-  var btn = document.getElementById("addProd"+k);
-  var nb = document.getElementById("nbProd"+k);
-  if(btn.value != '<?php echo htmlspecialchars($this->getLang('L_PUBLIC_ADD_BASKET')); ?>'){
-   if(nb.value == nb.getAttribute("data-o") || nb.value == 0){
-    if(sbmt){//delete
-     nb.value="0";
-    }
-    btn.value = '<?php echo htmlspecialchars($this->getLang('L_PUBLIC_DEL_BASKET')); ?>';
-    btn.setAttribute("class", "red");
-   }else{
-    btn.value = '<?php echo htmlspecialchars($this->getLang('L_PUBLIC_MOD_BASKET')); ?>';
-    btn.setAttribute("class", "orange");
-   }
-  }
- }
-</script>
+<script type="text/javascript">function chngNbProd(e,t){var a=document.getElementById("addProd"+e),d=document.getElementById("nbProd"+e);"<?php echo $this->getLang('L_PUBLIC_ADD_BASKET'); ?>"!=a.value&&(d.value==d.getAttribute("data-o")||0==d.value?(t&&(d.value="0"),a.value="<?php echo $this->getLang('L_PUBLIC_DEL_BASKET'); ?>",a.setAttribute("class","red")):(a.value="<?php echo $this->getLang('L_PUBLIC_MOD_BASKET'); ?>",a.setAttribute("class","orange")))}</script>
 <?php
   echo '<?php } ?>'; // fi if mode product || strstr template boutique || shrotcode
   if (isset($_SESSION[$this->plug['name']]["msgProdUpDate"]) && $_SESSION[$this->plug['name']]["msgProdUpDate"]){
@@ -617,7 +600,7 @@ if (isset($_SESSION[$this->plug['name']]["ncart"]) && $_SESSION[$this->plug['nam
     $this->aProds[$number]['template']=isset($attributes['template'])?$attributes['template']:$this->getParam('template');
 
     # On verifie que le produit existe bien
-    $file = PLX_ROOT.'data/products/'.$number.'.'.$attributes['url'].'.php';
+    $file = PLX_ROOT.(empty($this->getParam('racine_products'))?'data/products/':$this->getParam('racine_products')).$number.'.'.$attributes['url'].'.php';
 
     # On test si le fichier est lisible
     $this->aProds[$number]['readable'] = (is_readable($file) ? 1 : 0);
@@ -637,7 +620,7 @@ if (isset($_SESSION[$this->plug['name']]["ncart"]) && $_SESSION[$this->plug['nam
   # suppression
   if(!empty($content['selection']) AND $content['selection']=='delete' AND isset($content['idProduct'])){
    foreach($content['idProduct'] as $product_id){
-    $filename = PLX_ROOT.'data/products/'.$product_id.'.'.$this->aProds[$product_id]['url'].'.php';
+    $filename = PLX_ROOT.(empty($this->getParam('racine_products'))?'data/products/':$this->getParam('racine_products')).$product_id.'.'.$this->aProds[$product_id]['url'].'.php';
     if(is_file($filename)) unlink($filename);
     # si le produit supprimée est en page d'accueil on met à jour le parametre
     unset($this->aProds[$product_id]);
@@ -654,8 +637,8 @@ if (isset($_SESSION[$this->plug['name']]["ncart"]) && $_SESSION[$this->plug['nam
      if($stat_url=='') $stat_url = L_DEFAULT_NEW_PRODUCT_URL;
      # On vérifie si on a besoin de renommer le fichier du produit
      if(isset($this->aProds[$product_id]) AND $this->aProds[$product_id]['url']!=$stat_url){
-      $oldfilename = PLX_ROOT.'data/products/'.$product_id.'.'.$this->aProds[$product_id]['url'].'.php';
-      $newfilename = PLX_ROOT.'data/products/'.$product_id.'.'.$stat_url.'.php';
+      $oldfilename = PLX_ROOT.(empty($this->getParam('racine_products'))?'data/products/':$this->getParam('racine_products')).$product_id.'.'.$this->aProds[$product_id]['url'].'.php';
+      $newfilename = PLX_ROOT.(empty($this->getParam('racine_products'))?'data/products/':$this->getParam('racine_products')).$product_id.'.'.$stat_url.'.php';
       if(is_file($oldfilename)) rename($oldfilename, $newfilename);
      }
      $this->aProds[$product_id]['pcat'] = trim($content[$product_id.'_pcat']);
@@ -740,7 +723,7 @@ if (isset($_SESSION[$this->plug['name']]["ncart"]) && $_SESSION[$this->plug['nam
   **/
  public function getFileProduct($num){
   # Emplacement de la page
-  $filename = PLX_ROOT.'data/products/'.$num.'.'.$this->aProds[ $num ]['url'].'.php';
+  $filename = PLX_ROOT.(empty($this->getParam('racine_products'))?'data/products/':$this->getParam('racine_products')).$num.'.'.$this->aProds[ $num ]['url'].'.php';
   if(is_file($filename) AND filesize($filename) > 0){
    if($f = fopen($filename, 'r')){
     $content = fread($f, filesize($filename));
@@ -783,11 +766,11 @@ if (isset($_SESSION[$this->plug['name']]["ncart"]) && $_SESSION[$this->plug['nam
   //eval($this->plxPlugins->callHook('plxAdminEditProduct'));
 
   if($this->editProducts(null,true)){
-   if (!is_dir(PLX_ROOT.'data/products/')){
-    mkdir(PLX_ROOT.'data/products/', 0755, true);
+   if (!is_dir(PLX_ROOT.(empty($this->getParam('racine_products'))?'data/products/':$this->getParam('racine_products')))){
+    mkdir(PLX_ROOT.(empty($this->getParam('racine_products'))?'data/products/':$this->getParam('racine_products')), 0755, true);
    }
    # Génération du nom du fichier de la page statique
-   $filename = PLX_ROOT.'data/products/'.$content['id'].'.'.$this->aProds[ $content['id'] ]['url'].'.php';
+   $filename = PLX_ROOT.(empty($this->getParam('racine_products'))?'data/products/':$this->getParam('racine_products')).$content['id'].'.'.$this->aProds[ $content['id'] ]['url'].'.php';
    # On écrit le fichier
    if(plxUtils::write($content['content'],$filename))
     return plxMsg::Info(L_SAVE_SUCCESSFUL);
@@ -943,7 +926,7 @@ if (isset($_SESSION[$this->plug['name']]["ncart"]) && $_SESSION[$this->plug['nam
  public function productDate($format='#day #num_day #month #num_year(4)'){
 
   # On genere le nom du fichier dont on veux récupérer la date
-  $file = PLX_ROOT.'data/products/'.$this->productNumber();
+  $file = PLX_ROOT.(empty($this->getParam('racine_products'))?'data/products/':$this->getParam('racine_products')).$this->productNumber();
   $file .= '.'.$this->aProds[$this->productNumber() ]['url'].'.php';
   # Test de l'existence du fichier
   if(!is_file($file)) return;
@@ -962,7 +945,7 @@ if (isset($_SESSION[$this->plug['name']]["ncart"]) && $_SESSION[$this->plug['nam
   # On va verifier que la page a inclure est lisible
   if($this->aProds[ $this->productNumber() ]['readable'] == 1){
    # On genere le nom du fichier a inclure
-   $file = PLX_ROOT.'data/products/'.$this->productNumber();
+   $file = PLX_ROOT.(empty($this->getParam('racine_products'))?'data/products/':$this->getParam('racine_products')).$this->productNumber();
    $file .= '.'.$this->aProds[ $this->productNumber() ]['url'].'.php';
    # Inclusion du fichier
    ob_start();
@@ -986,9 +969,9 @@ if (isset($_SESSION[$this->plug['name']]["ncart"]) && $_SESSION[$this->plug['nam
   # Hook Plugins
   //if(eval($this->plxMotor->plxPlugins->callHook('plxShowProductInclude'))) return ;
   # On génère un nouvel objet plxGlob
-  $plxGlob_stats = plxGlob::getInstance(PLX_ROOT.'data/products/');
+  $plxGlob_stats = plxGlob::getInstance(PLX_ROOT.(empty($this->getParam('racine_products'))?'data/products/':$this->getParam('racine_products')));
   if($files = $plxGlob_stats->query('/^'.str_pad($id,3,'0',STR_PAD_LEFT).'.[a-z0-9-]+.php$/')){
-   include(PLX_ROOT.'data/products/'.$files[0]);
+   include(PLX_ROOT.(empty($this->getParam('racine_products'))?'data/products/':$this->getParam('racine_products')).$files[0]);
   }
  }
 
@@ -1256,7 +1239,7 @@ if (isset($_SESSION[$this->plug['name']]["ncart"]) && $_SESSION[$this->plug['nam
       require PLX_PLUGINS . 'plxMyShop/classes/paypal_api/boutonPaypalSimple.php';
      }
 
-     $nf=PLX_ROOT.'data/commandes/'.date("Y-m-d_H-i-s_").$_POST['methodpayment'].'_'.$totalpricettc.'_'.$totalpoidgshipping.'.html';
+     $nf=PLX_ROOT.(empty(trim($_POST['racine_commandes']))?'data/commandes/':trim($_POST(['racine_commandes']))).date("Y-m-d_H-i-s_").$_POST['methodpayment'].'_'.$totalpricettc.'_'.$totalpoidgshipping.'.html';
      $monfichier = fopen($nf, 'w+');
      $commandeContent="<!DOCTYPE html>
 <html>

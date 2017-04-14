@@ -101,6 +101,9 @@ $LANG = array(
 
 
 #config page
+'L_CONFIG_FOLDERS'                  => 'Emplacement des dossiers',
+'L_CONFIG_ORDERS_FOLDER'            => 'Emplacement des commandes (dossier)',
+'L_CONFIG_PRODUCTS_FOLDER'          => 'Emplacement des produits (dossier)',
 'L_CONFIG_AFFICHER_PANIER_MENU'     => 'Afficher le panier dans le menu',
 'L_CONFIG_AFFICHER_CATEGORIES_MENU' => 'Afficher les catégories dans le menu',
 'L_CONFIG_SHOP_INFO'                => 'Informations Boutique',
