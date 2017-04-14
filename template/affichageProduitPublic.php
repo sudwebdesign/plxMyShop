@@ -8,11 +8,9 @@ if (($plxPlugin->aProds[ $plxPlugin->productNumber()]['active']!=1 || $plxPlugin
 <script type="text/javascript">
 jQuery.noConflict();
 </script>
-<script type='text/javascript' src='<?php echo $plxPlugin->plxMotor->racine . PLX_PLUGINS;?>plxMyShop/js/libajax.js'></script>
 <script type='text/javascript' src='<?php echo $plxPlugin->plxMotor->racine . PLX_PLUGINS;?>plxMyShop/js/panier.js'></script>
 <script type='text/javascript'>
 var error = false;
-var repertoireAjax = '<?php echo $plxPlugin->plxMotor->racine . PLX_PLUGINS;?>plxMyShop/ajax/';
 var devise = '<?php echo $plxPlugin->getParam("devise");?>';
 var pos_devise = '<?php echo $plxPlugin->getParam("pos_devise");?>';
 var L_FOR = '<?php echo $plxPlugin->getlang('L_FOR'); ?>';
